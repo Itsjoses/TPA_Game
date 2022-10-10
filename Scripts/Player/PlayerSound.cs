@@ -15,8 +15,12 @@ public class PlayerSound : MonoBehaviour
     [SerializeField] private AudioClip[] hitClip;
     [SerializeField] private AudioSource deadth;
     [SerializeField] private AudioSource sword;
+    [SerializeField] private AudioClip[] walksound;
+    [SerializeField] private AudioSource walknrunsound;
 
     private float step_cooldown;
+    private float walksound_cooldown;
+    private float totalwalksound_cooldown;
     private float totalstep_cooldown = 0f;
     void Start()
     {
@@ -28,13 +32,28 @@ public class PlayerSound : MonoBehaviour
     {
 
         playerrun();
+        playerwalksound();
+    }
+
+    void playerwalksound()
+    {
+        if (cc.velocity.sqrMagnitude >= 0.1f)
+        {
+            totalwalksound_cooldown += Time.deltaTime;
+            if (totalwalksound_cooldown > walksound_cooldown)
+            {
+                walknrunsound.volume = Random.Range(0.3f, 0.6f);
+                walknrunsound.clip = walksound[Random.Range(0, walksound.Length)];
+                walknrunsound.Play();
+                totalwalksound_cooldown = 0f;
+            }
+
+        }
+        else totalwalksound_cooldown = 0f;
     }
 
     void playerrun()
     {
-        /*float Horizontal = Input.GetAxisRaw("Horizontal");
-        float Vertical = Input.GetAxisRaw("Vertical");
-        Vector3 direction = new Vector3(Horizontal, 0, Vertical).normalized;*/
         if (cc.velocity.sqrMagnitude >= 0.1f)
         {
             totalstep_cooldown += Time.deltaTime;
@@ -78,6 +97,11 @@ public class PlayerSound : MonoBehaviour
     public void set_stepCooldown(float step_cooldown)
     {
         this.step_cooldown = step_cooldown;
+    }
+
+    public void set_walknrunCooldown(float walksound_cooldown)
+    {
+        this.walksound_cooldown = walksound_cooldown;
     }
 
 

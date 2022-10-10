@@ -69,12 +69,14 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             speed = 10 + (PlayerStatus.getAgi() - 1);
-            playersound.set_stepCooldown(2.5f);
+            playersound.set_stepCooldown(10f);
+            playersound.set_walknrunCooldown(0.25f);
         }
         else
         {
             speed = 5 + (PlayerStatus.getAgi() - 1);
             playersound.set_stepCooldown(9999f);
+            playersound.set_walknrunCooldown(0.5f);
         }
     }
 }

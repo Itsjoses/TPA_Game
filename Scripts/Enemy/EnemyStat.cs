@@ -35,12 +35,13 @@ public class EnemyStat : MonoBehaviour
 
     public void deadthanimation()
     {
-        enemyspawn.enemyCount -= 1;
+        
         anim.SetBool("isDeath", true);
     }
 
     public void destory()
     {
+        enemyspawn.enemyCount -= 1;
         playerstatus.setXp(xp);
     }
 

@@ -108,6 +108,11 @@ public class PlayerAnimation : MonoBehaviour
             run = true;
             animator.SetBool("isRun", true);
         }
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetButtonUp("Horizontal") || Input.GetButtonUp("Vertical"))
+        {
+            run = false;
+            animator.SetBool("isRun", false);
+        }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             run = false;
