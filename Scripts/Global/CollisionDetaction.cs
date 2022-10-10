@@ -4,24 +4,29 @@ using UnityEngine;
 
 public class CollisionDetaction : MonoBehaviour
 {
-    [SerializeField]
-    private PlayerStatus playerstatus;
+    [SerializeField] private PlayerStatus playerstatus;
     // private bool hitted = false;
     
     private void OnTriggerEnter(Collider other)
     {
         float atk = playerstatus.str * 20;
-        if (other.tag == "Enemy")
+        if (playerstatus.getAttack() == true)
         {
-            Debug.Log(other.name);
-            EnemyStat enemy = other.GetComponent<EnemyStat>();
-            
-            enemy.sethealth(atk);
-            if(enemy.gethealth() <= 0)
+            if (other.tag == "Enemy")
             {
-                enemy.destory();
+                Debug.Log(other.name);
+                EnemyStat enemy = other.GetComponent<EnemyStat>();
+
+                enemy.sethealth(atk);
+                if (enemy.gethealth() <= 0)
+                {
+                    
+                    enemy.deadthanimation();
+                }
+
             }
-           
+            playerstatus.resetAttack();
         }
+        
     }
 }

@@ -19,7 +19,6 @@ public class PlayerStatus : MonoBehaviour
     public int pow = 1;
     private bool Death = false;
 
-
     private void Awake()
     {
         playersound = GetComponent<PlayerSound>();
@@ -114,6 +113,21 @@ public class PlayerStatus : MonoBehaviour
     public int getLevel()
     {
         return level;
+    }
+
+    public void setAttack()
+    {
+        canAttack = true;
+    }
+
+    public void resetAttack()
+    {
+        canAttack = false;
+    }
+
+    public bool getAttack()
+    {
+        return canAttack;
     }
 
 }

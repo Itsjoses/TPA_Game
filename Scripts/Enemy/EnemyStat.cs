@@ -12,7 +12,7 @@ public class EnemyStat : MonoBehaviour
     [SerializeField] public float CurrenthealthEnemy = 100f;
     [SerializeField] private float atkEnemy = 4f;
     [SerializeField] private int xp = 20;
-
+    private bool enemyCanAttack = false;
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -33,18 +33,21 @@ public class EnemyStat : MonoBehaviour
         return atkEnemy;
     }
 
+    public void deadthanimation()
+    {
+        enemyspawn.enemyCount -= 1;
+        anim.SetBool("isDeath", true);
+    }
+
     public void destory()
     {
         playerstatus.setXp(xp);
-        anim.SetBool("isDeath", true);
-        
     }
 
     public void deleteBody()
     {
-        enemyspawn.enemyCount -= 1;
+        
         Destroy(this.gameObject);
     }
-
     
 }

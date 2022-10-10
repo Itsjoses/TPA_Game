@@ -9,6 +9,7 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField] private PickWeapon pickweapon;
     private Animator animator;
     private int comboAttack;
+    private bool run;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -24,6 +25,7 @@ public class PlayerAnimation : MonoBehaviour
         if (direction.magnitude >= 0.1f)
         {
             strafe();
+            runstate();
             walk();
             roll();
             animator.SetFloat("directionX", direction.x);
@@ -35,7 +37,6 @@ public class PlayerAnimation : MonoBehaviour
             animator.SetBool("isWalk", false);
             animator.SetBool("isRoll", false);
         }
-        playerstatus.canAttack = false;
     }
 
     void attackcooldown()
@@ -43,6 +44,7 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool("punch 0", false);
         animator.SetBool("punchleft", false);
         animator.SetLayerWeight(animator.GetLayerIndex("Attack"), 0);
+        playerstatus.resetAttack();
     }
 
     void attack()
@@ -50,14 +52,12 @@ public class PlayerAnimation : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && comboAttack == 0 && pickweapon.getequip() == false)
         {
             playersound.punchaudio();
-            playerstatus.canAttack = true;
             animator.SetLayerWeight(animator.GetLayerIndex("Attack"), 1);
             animator.SetTrigger("ispunchright"  );
             comboAttack++;
         }else if(Input.GetMouseButtonDown(0) && comboAttack > 0 && pickweapon.getequip() == false)
         {
             playersound.punchaudio();
-            playerstatus.canAttack = true;
             animator.SetLayerWeight(animator.GetLayerIndex("Attack"), 1);
             animator.SetTrigger("ispunchleft");
             comboAttack = 0;
@@ -66,7 +66,6 @@ public class PlayerAnimation : MonoBehaviour
         if(Input.GetMouseButtonDown(0) && pickweapon.getequip() == true)
         {
             playersound.swordaudio();
-            playerstatus.canAttack = true;
             animator.SetLayerWeight(animator.GetLayerIndex("Attack"), 1);
             animator.SetTrigger("isMelee");
         }
@@ -77,6 +76,12 @@ public class PlayerAnimation : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && animator.GetBool("isWalk") == true)
         {
             animator.SetBool("isRoll", true);
+
+        }else if(Input.GetMouseButtonDown(1) && animator.GetBool("isRun") == true)
+        {
+            animator.SetBool("isRoll", true);
+            animator.SetBool("isWalk", false);
+            animator.SetBool("isRun", false);
         }
         else
         {
@@ -96,8 +101,23 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
+    void runstate()
+    {
+        if (Input.GetKey(KeyCode.LeftShift) && animator.GetBool("isWalk"))
+        {
+            run = true;
+            animator.SetBool("isRun", true);
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            run = false;
+            animator.SetBool("isRun", false);
+        }
+    }
+
     void walk()
     {
+        
         if (Input.GetButton("Vertical"))
         {
             animator.SetBool("isWalk", true);
@@ -116,6 +136,11 @@ public class PlayerAnimation : MonoBehaviour
     public void changeDeathscene()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(3);
+    }
+
+    public void setAttack()
+    {
+        playerstatus.setAttack();
     }
 
 }
